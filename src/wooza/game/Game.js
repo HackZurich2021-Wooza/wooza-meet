@@ -31,7 +31,7 @@ export default function Game() {
     const emitter = new Proton.Emitter();
     proton.USE_CLOCK = true;
     //set Rate
-    emitter.rate = new Proton.Rate(Proton.getSpan(1, 1), 0.01);
+    emitter.rate = new Proton.Rate(Proton.getSpan(10, 20), 0.01);
 
     //add Initialize
     emitter.addInitialize(new Proton.Radius(2, 2));
@@ -60,7 +60,7 @@ export default function Game() {
 
     //set emitter position
     emitter.p.x = canvas.current.width / 2;
-    emitter.p.y = 0;
+    emitter.p.y = 30;
     emitter.emit();
 
     //add emitter to the proton
