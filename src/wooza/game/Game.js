@@ -1,7 +1,20 @@
 import Proton from "proton-engine";
 import RAFManager from 'raf-manager';
+import { SlowingRectZone } from "./SlowingRectZone";
 
 import { useEffect, useRef } from "react";
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100vw',
+    height: '100vh'
+
+  }
+}
 
 
 export default function Game() {
@@ -15,6 +28,7 @@ export default function Game() {
 
   useEffect(() => {
 
+    // <<<<<<< HEAD
     // microphone stuff
     navigator.getUserMedia = navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
@@ -37,7 +51,6 @@ export default function Game() {
           analyser.connect(javascriptNode);
           javascriptNode.connect(audioContext.destination);
 
-          // canvasContext = $("#canvas")[0].getContext("2d");
           var timeTotal = 0;
           var timeBreathing = 0;
           var timeSilence = 0;
@@ -46,35 +59,31 @@ export default function Game() {
           const volumeThreshold = 5;
           const silenceThreshold = 0.5;
 
-          // volumeMeterLabel = $("#volumeMeter")[0];
-          // volumeGoodLabel = $("#volumeGood")[0];
-          // timeBreathingLabel = $("#timeBreathing")[0];
-          // timeHoldingLabel = $("#timeHolding")[0];
-          // breathDirectionLabel = $("#breathDirection")[0];
-          // timeTotalLabel = $("#timeTotal")[0];
-
-          // breathDirectionLabel.innerHTML = "<<<<<<<<";
-
-
           const proton = new Proton();
           const emitter = new Proton.Emitter();
 
+          proton.USE_CLOCK = true;
           //set Rate
           emitter.rate = new Proton.Rate(Proton.getSpan(10, 20), 0.1);
 
           //add Initialize
-          emitter.addInitialize(new Proton.Radius(1, 12));
-          emitter.addInitialize(new Proton.Life(0, 1));
-          emitter.addInitialize(new Proton.Velocity(1, Proton.getSpan(0, 360), "polar"));
 
+          emitter.addInitialize(new Proton.Radius(2, 2));
+
+          emitter.addInitialize(new Proton.Mass(1));
           //add Behaviour
-          emitter.addBehaviour(new Proton.Color("ff0000", "random"));
-          emitter.addBehaviour(new Proton.Alpha(1, 0));
-
+          emitter.addBehaviour(new Proton.Collision(emitter, true, (a, b) => {
+            a.addBehaviour(new Proton.RandomDrift(0.01, 0.01, 0, Infinity, Proton.easeOutLinear));
+          }, 5, Proton.easeOutLinear));
+          emitter.addBehaviour(new Proton.Color("c2b280"));
+          emitter.damping = 0.1;
+          emitter.addBehaviour(new Proton.Gravity(50));
+          let crossZone = new Proton.CrossZone(new SlowingRectZone(0, 0, canvas.current.width, canvas.current.height), 'bound', Infinity);
+          emitter.addBehaviour(crossZone);
           //set emitter position
           emitter.p.x = canvas.current.width / 2;
-          emitter.p.y = canvas.current.height / 2;
-          // emitter.emit();
+          emitter.p.y = 30;
+          emitter.emit();
 
           // add canvas renderer
           const renderer = new Proton.CanvasRenderer(canvas.current);
@@ -82,7 +91,7 @@ export default function Game() {
 
           RAFManager.add(() => { proton.update(); })
 
-                proton.addEmitter(emitter);
+          proton.addEmitter(emitter);
           javascriptNode.onaudioprocess = function () {
             // one interval is ca. 1/20 sec
             timeTotal += 0.05;
@@ -100,11 +109,8 @@ export default function Game() {
             var volumeLevel = values / length;
 
 
-            // volumeMeterLabel.innerHTML = Math.round(volumeLevel);
-
-            // console.log(volumeLevel);
+            console.log(volumeLevel);
             if (volumeLevel > volumeThreshold) {
-              // volumeGoodLabel.innerHTML = "Breathing";
               timeBreathing += 0.05;
               timeSilence = 0;
 
@@ -112,12 +118,9 @@ export default function Game() {
                 breathState = breathDirection ? "IN" : "OUT";
                 breathDirection = !breathDirection;
 
-                emitter.emit();
-                //add emitter to the proton
-
+                ////// emitter.emit();
               }
             } else {
-              // volumeGoodLabel.innerHTML = "Not Breathing";
               timeSilence += 0.05;
 
             }
@@ -126,26 +129,9 @@ export default function Game() {
               // we assume a switch of breath-in/out after 0.1 seconds
               breathState = "HODL";
               timeBreathing = 0;
-              emitter.stop();
-              //add emitter to the proton
-              // proton.addEmitter(emitter);
+              ////// emitter.stop();
             }
 
-
-
-            // breathDirectionLabel.innerHTML = breathState;
-            // timeTotalLabel.innerHTML = parseFloat(timeTotal).toFixed(2);
-            // timeBreathingLabel.innerHTML = parseFloat(timeBreathing).toFixed(2);
-            // timeHoldingLabel.innerHTML = parseFloat(timeSilence).toFixed(2);
-
-
-            // canvasContext.clearRect(0, 0, 150, 300);
-            // canvasContext.fillStyle = '#FF0A55'; //was BadA55 (very cute)
-            // canvasContext.fillRect(0, 300 - average, 150, 300);
-            // canvasContext.fillStyle = '#F62626';
-            // canvasContext.font = "24px impact";
-            // canvasContext.fillText(Math.round(average - 40), 2, 30);
-            // console.log (average);
           } // end fn stream
         },
         function (err) {
@@ -154,18 +140,13 @@ export default function Game() {
     } else {
       console.log("getUserMedia not supported");
     }
-
-
-
-
-
   }, [canvas]
   );
 
   return (
-    <>
-      <canvas ref={canvas} width="500px" height="500px"></canvas>
-    </>
+    <div style={styles.container}>
+      <canvas ref={canvas} ></canvas>
+    </div>
   );
 }
 
