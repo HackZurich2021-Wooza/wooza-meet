@@ -2,8 +2,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import './App.css';
 import Meet from './wooza/meet/Meet';
@@ -21,7 +20,7 @@ function App() {
           <Route path="/setup">
             <Setup />
           </Route>
-          <Route path="/">
+          <Route path="/meet">
             <Meet />
           </Route>
         </Switch>
