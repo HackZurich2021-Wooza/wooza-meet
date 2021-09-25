@@ -16,29 +16,39 @@ export default function Game() {
 
     const proton = new Proton();
     const emitter = new Proton.Emitter();
-
+    proton.USE_CLOCK = true;
     //set Rate
-    emitter.rate = new Proton.Rate(Proton.getSpan(10, 20), 0.1);
+    emitter.rate = new Proton.Rate(Proton.getSpan(1, 1), 0.9);
 
     //add Initialize
-    emitter.addInitialize(new Proton.Radius(1, 1));
+    emitter.addInitialize(new Proton.Radius(3, 3));
 
-
+    emitter.addInitialize(new Proton.Mass(1));
 
     //add Behaviour
     emitter.addBehaviour(new Proton.Collision(emitter, true, (a, b) => {
-      a.addBehaviour(new Proton.RandomDrift(1, 1, 0, 2));
-    }));
+      a.addBehaviour(new Proton.RandomDrift(0.01, 0.01, 0, Infinity, Proton.easeOutLinear));
+      // a.addBehaviour(new Proton.Force(0,0));
+      // b.addBehaviour(new Proton.RandomDrift(-0.5, -0.5, 0, Infinity));
+      // b.addBehaviour(new Proton.Force(0,0));
+    }, 5, Proton.easeOutLinear));
 
     emitter.addBehaviour(new Proton.Color("c2b280"));
-
-    emitter.addBehaviour(new Proton.Gravity(50));
-    emitter.addBehaviour(new Proton.CrossZone(new Proton.LineZone(0, canvas.current.height, canvas.current.width, canvas.current.height), 'bound'));
+    emitter.damping = 0.1;
+    emitter.addBehaviour(new Proton.Gravity(10));
+    let crossZone = new Proton.CrossZone(new Proton.LineZone(0, canvas.current.height, canvas.current.width, canvas.current.height), 'bound', Infinity);
+    // crossZone.addBehaviour(new Proton.Collision(emitter, true, (a, b) => {
+    //   a.addBehaviour(new Proton.RandomDrift(-0.5, -0.5, 0, Infinity));
+    //   a.addBehaviour(new Proton.Force(0,0));
+    //   b.addBehaviour(new Proton.RandomDrift(-0.5, -0.5, 0, Infinity));
+    //   b.addBehaviour(new Proton.Force(0,0));
+    // })
+    emitter.addBehaviour(crossZone);
 
     //set emitter position
     emitter.p.x = canvas.current.width / 2;
     emitter.p.y = 0;
-    emitter.emit();
+    emitter.emit(1);
 
     //add emitter to the proton
     proton.addEmitter(emitter);
