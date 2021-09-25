@@ -11,6 +11,9 @@ export default function Game() {
 
   useEffect(() => {
 
+    canvas.current.width = window.innerWidth;
+    canvas.current.height = window.innerHeight;
+
     const proton = new Proton();
     const emitter = new Proton.Emitter();
 
@@ -18,12 +21,19 @@ export default function Game() {
     emitter.rate = new Proton.Rate(Proton.getSpan(10, 20), 0.1);
 
     //add Initialize
-    emitter.addInitialize(new Proton.Radius(0.1, 0.1));
+    emitter.addInitialize(new Proton.Radius(1, 1));
+
+
 
     //add Behaviour
+    emitter.addBehaviour(new Proton.Collision(emitter, true, (a, b) => {
+      a.addBehaviour(new Proton.RandomDrift(1, 1, 0, 2));
+    }));
+
     emitter.addBehaviour(new Proton.Color("c2b280"));
 
-    emitter.addBehaviour(new Proton.Gravity(1));
+    emitter.addBehaviour(new Proton.Gravity(50));
+    emitter.addBehaviour(new Proton.CrossZone(new Proton.LineZone(0, canvas.current.height, canvas.current.width, canvas.current.height), 'bound'));
 
     //set emitter position
     emitter.p.x = canvas.current.width / 2;
@@ -43,7 +53,7 @@ export default function Game() {
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      <canvas style={{ width: '100vw', height: '100vh' }} ref={canvas} ></canvas>
+      <canvas ref={canvas} ></canvas>
     </div>
   );
 }
