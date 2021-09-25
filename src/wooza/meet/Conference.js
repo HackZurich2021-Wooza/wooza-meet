@@ -54,7 +54,7 @@ export default function Conference() {
 
   return (
     <div style={styles.container}>
-      <img style={styles.logo} src="../Logo_Wooza.png" />
+      <img style={styles.logo} src="../Logo_Wooza_White.png" />
       <h1 style={styles.header}>Kickoff - Blockchain meets AI 4.0</h1>
       <div style={styles.innerContainer}>
         <div style={styles.item}>
