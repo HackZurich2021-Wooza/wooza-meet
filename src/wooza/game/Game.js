@@ -18,18 +18,17 @@ export default function Game() {
     emitter.rate = new Proton.Rate(Proton.getSpan(10, 20), 0.1);
 
     //add Initialize
-    emitter.addInitialize(new Proton.Radius(1, 12));
-    emitter.addInitialize(new Proton.Life(2, 4));
-    emitter.addInitialize(new Proton.Velocity(3, Proton.getSpan(0, 360), "polar"));
+    emitter.addInitialize(new Proton.Radius(0.1, 0.1));
 
     //add Behaviour
-    emitter.addBehaviour(new Proton.Color("ff0000", "random"));
-    emitter.addBehaviour(new Proton.Alpha(1, 0));
+    emitter.addBehaviour(new Proton.Color("c2b280"));
+
+    emitter.addBehaviour(new Proton.Gravity(1));
 
     //set emitter position
     emitter.p.x = canvas.current.width / 2;
-    emitter.p.y = canvas.current.height / 2;
-    emitter.emit(5);
+    emitter.p.y = 0;
+    emitter.emit();
 
     //add emitter to the proton
     proton.addEmitter(emitter);
@@ -41,9 +40,10 @@ export default function Game() {
     RAFManager.add(() => { proton.update(); })
   }, [canvas]
   );
+
   return (
-    <>
-      <canvas ref={canvas} width="500px" height="500px"></canvas>
-    </>
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <canvas style={{ width: '100vw', height: '100vh' }} ref={canvas} ></canvas>
+    </div>
   );
 }
