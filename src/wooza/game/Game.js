@@ -1,7 +1,20 @@
 import Proton from "proton-engine";
 import RAFManager from 'raf-manager';
+import { SlowingRectZone } from "./SlowingRectZone";
 
 import { useEffect, useRef } from "react";
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100vw',
+    height: '100vh'
+
+  }
+}
 
 
 export default function Game() {
@@ -11,17 +24,17 @@ export default function Game() {
 
   useEffect(() => {
 
-    canvas.current.width = window.innerWidth;
-    canvas.current.height = window.innerHeight;
+    canvas.current.width = window.innerWidth / 2;
+    canvas.current.height = window.innerHeight / 2;
 
     const proton = new Proton();
     const emitter = new Proton.Emitter();
     proton.USE_CLOCK = true;
     //set Rate
-    emitter.rate = new Proton.Rate(Proton.getSpan(1, 1), 0.9);
+    emitter.rate = new Proton.Rate(Proton.getSpan(1, 1), 0.01);
 
     //add Initialize
-    emitter.addInitialize(new Proton.Radius(3, 3));
+    emitter.addInitialize(new Proton.Radius(2, 2));
 
     emitter.addInitialize(new Proton.Mass(1));
 
@@ -35,8 +48,8 @@ export default function Game() {
 
     emitter.addBehaviour(new Proton.Color("c2b280"));
     emitter.damping = 0.1;
-    emitter.addBehaviour(new Proton.Gravity(10));
-    let crossZone = new Proton.CrossZone(new Proton.LineZone(0, canvas.current.height, canvas.current.width, canvas.current.height), 'bound', Infinity);
+    emitter.addBehaviour(new Proton.Gravity(50));
+    let crossZone = new Proton.CrossZone(new SlowingRectZone(0, 0, canvas.current.width, canvas.current.height), 'bound', Infinity);
     // crossZone.addBehaviour(new Proton.Collision(emitter, true, (a, b) => {
     //   a.addBehaviour(new Proton.RandomDrift(-0.5, -0.5, 0, Infinity));
     //   a.addBehaviour(new Proton.Force(0,0));
@@ -48,7 +61,7 @@ export default function Game() {
     //set emitter position
     emitter.p.x = canvas.current.width / 2;
     emitter.p.y = 0;
-    emitter.emit(1);
+    emitter.emit();
 
     //add emitter to the proton
     proton.addEmitter(emitter);
@@ -62,7 +75,7 @@ export default function Game() {
   );
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={styles.container}>
       <canvas ref={canvas} ></canvas>
     </div>
   );
