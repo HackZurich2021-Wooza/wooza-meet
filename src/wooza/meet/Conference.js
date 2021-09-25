@@ -12,6 +12,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#474747'
   },
   innerContainer: {
     display: 'flex',
@@ -23,8 +24,23 @@ const styles = {
     width: '400px',
     height: '300px',
     margin: '10px',
-    backgroundColor: 'gray',
+    backgroundColor: '#474747'
   },
+  logo: {
+    position: 'absolute',
+    top: '10px',
+    left: '10px',
+    width: '180px'
+  },
+  header: {
+    color: 'white',
+    fontFamily: 'Source Sans Pro'
+  },
+  footer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: '0'
+  }
 };
 
 
@@ -38,19 +54,20 @@ export default function Conference() {
 
   return (
     <div style={styles.container}>
-      <h1>Meeting</h1>
+      <img style={styles.logo} src="../Logo_Wooza.png" />
+      <h1 style={styles.header}>Kickoff - Blockchain meets AI 4.0</h1>
       <div style={styles.innerContainer}>
         <div style={styles.item}>
           <ParticipantDisplay tracks={localTracks} disableAudio={false} />
         </div>
         <div style={styles.item}>
-          { participants.length > 0 ? <ParticipantDisplay tracks={remoteTracks[participants[0]]} /> : null }
+          {participants.length > 0 ? <ParticipantDisplay tracks={remoteTracks[participants[0]]} /> : null}
         </div>
         <div style={styles.item}>
-          { participants.length > 1 ? <ParticipantDisplay tracks={remoteTracks[participants[1]]} /> : null }
+          {participants.length > 1 ? <ParticipantDisplay tracks={remoteTracks[participants[1]]} /> : null}
         </div>
       </div>
-      <p>{ meetingId }</p>
+      <img style={styles.footer} src="../footer.png" />
     </div>
   );
 }
