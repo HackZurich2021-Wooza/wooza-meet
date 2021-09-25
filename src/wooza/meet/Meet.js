@@ -1,3 +1,4 @@
+import config from './config';
 
 const JitsiMeetJS = window.JitsiMeetJS;
 
@@ -9,12 +10,7 @@ function joinMeeting(meetingStr) {
   const conn = new JitsiMeetJS.JitsiConnection(
     null,
     null,
-    {
-      hosts: {
-        domain: 'alpha.jitsi.net',
-        muc: 'conference.alpha.jitsi.net',
-      },
-    },
+    config,
   );
 
   conn.addEventListener(
@@ -32,10 +28,7 @@ function joinMeeting(meetingStr) {
 
   console.log('start connection');
   conn.connect();
-
-
 }
-
 
 
 export default function Meet() {
