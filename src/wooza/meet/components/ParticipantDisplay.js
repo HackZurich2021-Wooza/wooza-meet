@@ -9,7 +9,7 @@ const styles = {
 };
 
 
-export default function ParticipantDisplay({ tracks: inputTracks  }) {
+export default function ParticipantDisplay({ tracks: inputTracks, disableAudio = false }) {
   const tracks = inputTracks ?? [];
   let videoTrack, audioTrack;
   for (let i = 0; i < tracks.length; i++) {
@@ -19,6 +19,9 @@ export default function ParticipantDisplay({ tracks: inputTracks  }) {
     } else {
       audioTrack = track;
     }
+  }
+  if (disableAudio) {
+    audioTrack = undefined;
   }
 
   const videoRef = useRef();

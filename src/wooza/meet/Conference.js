@@ -34,13 +34,14 @@ export default function Conference() {
   const [localTracks, remoteParticipants, remoteTracks] = useJitsiMeeting(meetingId);
 
   const participants = remoteParticipants.slice(-2);
+  console.warn('PARTICIPANTS', remoteParticipants);
 
   return (
     <div style={styles.container}>
       <h1>Meeting</h1>
       <div style={styles.innerContainer}>
         <div style={styles.item}>
-          <ParticipantDisplay tracks={localTracks} />
+          <ParticipantDisplay tracks={localTracks} disableAudio={false} />
         </div>
         <div style={styles.item}>
           { participants.length > 0 ? <ParticipantDisplay tracks={remoteTracks[participants[0]]} /> : null }
