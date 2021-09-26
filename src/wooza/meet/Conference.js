@@ -54,11 +54,11 @@ export default function Conference() {
 
   return (
     <div style={styles.container}>
-      <img style={styles.logo} src="../Logo_Wooza_White.png" />
+      <img style={styles.logo} src="../Logo_Wooza_White.png" alt="" />
       <h1 style={styles.header}>Kickoff - Blockchain meets AI 4.0</h1>
       <div style={styles.innerContainer}>
         <div style={styles.item}>
-          <ParticipantDisplay tracks={localTracks} disableAudio={false} />
+          <ParticipantDisplay tracks={localTracks} disableAudio={true} />
         </div>
         <div style={styles.item}>
           {participants.length > 0 ? <ParticipantDisplay tracks={remoteTracks[participants[0]]} /> : null}
@@ -67,7 +67,7 @@ export default function Conference() {
           {participants.length > 1 ? <ParticipantDisplay tracks={remoteTracks[participants[1]]} /> : null}
         </div>
       </div>
-      <img style={styles.footer} src="../footer.png" />
+      <img style={styles.footer} src="../footer.png" alt="" />
     </div>
   );
 }
