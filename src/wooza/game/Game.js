@@ -615,8 +615,8 @@ export default function Game() {
   useEffect(() => {
     const canvas = canvasRef.current;
     console.log(canvasRef);
-    const context = canvas.getContext('2d');
-    console.log(context);
+    //const context = canvas.getContext('2d');
+    //console.log(context);
     // make_base();
 
     // function make_base() {
