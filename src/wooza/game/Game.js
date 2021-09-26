@@ -13,10 +13,17 @@ const styles = {
     backgroundColor: 'black'
   },
   canvas: {
-    width: '100vw',
-    height: '25vh',
+    width: '50vw',
+    height: '50vh',
     position: 'relative',
     top: '25vh'
+  },
+  cover: {
+    backgroundColor: 'black',
+    width: '100vw',
+    height: '20vh',
+    position: 'relative',
+    top: '-30vh'
   }
 }
 
@@ -598,8 +605,8 @@ export default function Game() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    canvas.width = canvas.clientWidth / 2;
+    canvas.height = canvas.clientHeight / 2;
     console.log(twgl);
     const gl = twgl.getWebGLContext(canvas, {
       alpha: false,
@@ -664,7 +671,25 @@ export default function Game() {
             const drawX = i + brushX;
             const drawY = j + brushY;
             if (drawX >= 0 && drawY >= 0 && drawX < bufferWidth && drawY < bufferHeight) {
-              currentBuffer[drawX + drawY * bufferWidth] = elements.sand;
+              currentBuffer[drawX + drawY * bufferWidth] = elements.fire;
+            }
+          }
+        }
+      }
+    }
+
+    function drawAtXY(x, y, element, sizeX, sizeY) {
+      sizeX = sizeX || 32;
+      sizeY = sizeY || 8;
+      if (x >= 0 && y >= 0 && x < 1 && y < 1) {
+        const i = Math.floor(x * bufferWidth);
+        const j = Math.floor(y * bufferHeight);
+        for (let brushX = -sizeX; brushX < sizeX; brushX++) {
+          for (let brushY = -sizeY; brushY < sizeY; brushY++) {
+            const drawX = i + brushX;
+            const drawY = j + brushY;
+            if (drawX >= 0 && drawY >= 0 && drawX < bufferWidth && drawY < bufferHeight) {
+              currentBuffer[drawX + drawY * bufferWidth] = element;
             }
           }
         }
@@ -685,31 +710,30 @@ export default function Game() {
       drawing = false;
     }, false);
 
-    const elementButtons = [];
-    for (const elementName in elements) {
-      const element = elements[elementName];
-      if (!element.hidden) {
-        const button = document.createElement("div");
-        elementButtons.push(button);
-        const label = document.createTextNode(elementName);
-        button.appendChild(label);
-        const hex = rgb2hex(element.red * 0.5, element.green * 0.5, element.blue * 0.5);
-        button.classList.add("elementButton");
-        button.style = `background-color: ${hex};`;
-        document.getElementById("elementButtons").appendChild(button);
-        button.onclick = function (event) {
-          selectedElement = element;
-          for (const other of elementButtons) {
-            other.classList.remove("elementButtonSelected");
-          }
-          button.classList.add("elementButtonSelected");
-        }
-      }
-    }
+    let drop = 0;
+
+    let out = true;
+
+    let pathCounter = 0;
+
+    const PATH_DURATION = 1800;
 
     const update = () => {
       // Draw to buffer
       if (drawing) drawAtMouse(lastMouseEvent);
+
+      drop++;
+
+      if (drop < 400) drawAtXY(0.5, 0.1, elements.sand);
+
+      if (drop > 400 && out && pathCounter < PATH_DURATION) {
+        let y = 0.6 + 0.4 * pathCounter / PATH_DURATION;
+        let xamp = 0.3 + 0.7 * pathCounter / PATH_DURATION;
+        let x = Math.sin(3.25 * pathCounter * 2 * Math.PI / PATH_DURATION) * xamp * 0.6
+          / 2 + 0.5;
+        drawAtXY(x, y, elements.fire, 2, 2);
+        pathCounter++;
+      }
 
 
 
@@ -741,8 +765,7 @@ export default function Game() {
   return (
     <div style={styles.container}>
       <canvas ref={canvasRef} style={styles.canvas}></canvas>
-
-      <div id="elementButtons"></div>
+      <div style={styles.cover}></div>
     </div>
   );
 }
