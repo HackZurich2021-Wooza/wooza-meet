@@ -13,7 +13,10 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black'
+    backgroundImage: 'url(\'sanddunes2.jpg\')',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center',
   },
   canvas: {
     width: '50vw',
@@ -48,7 +51,7 @@ export default function Game() {
       selfReactions: [],
     },
     sand: {
-      red: 1.0, green: 0.8, blue: 0.2,
+      red: 222 / 256, green: 135 / 256, blue: 58 / 256,
       density: 0.7, gravity: 0.8, slip: 0, slide: 0.8, scatter: 0,
       reactions: [],
       selfReactions: [],
@@ -60,7 +63,7 @@ export default function Game() {
       selfReactions: [],
     },
     flyingSand: {
-      red: 1.0, green: 0.8, blue: 0.2,
+      red: 242 / 256, green: 171 / 256, blue: 107 / 256,
       density: -0.2, gravity: -0.2, slip: 0, slide: 0, scatter: 0.4,
       hidden: true,
       reactions: [],
