@@ -22,14 +22,14 @@ const styles = {
     width: '50vw',
     height: '50vh',
     position: 'relative',
-    top: '25vh'
+    top: '25vh',
   },
   cover: {
     backgroundColor: 'black',
     width: '100vw',
     height: '20vh',
     position: 'relative',
-    top: '-30vh'
+    top: '-30vh',
   }
 }
 
@@ -617,23 +617,9 @@ export default function Game() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    console.log(canvasRef);
-    //const context = canvas.getContext('2d');
-    //console.log(context);
-    // make_base();
-
-    // function make_base() {
-    //   let base_image = new Image();
-    //   base_image.src = 'Sombrero_Wooza.png';
-    //   base_image.onload = function () {
-    //     context.drawImage(base_image, 0, 0);
-    //   }
-    // }
-
-
-
     canvas.width = canvas.clientWidth / 2;
     canvas.height = canvas.clientHeight / 2;
+
     const gl = twgl.getWebGLContext(canvas, {
       alpha: false,
       antialias: false,
@@ -736,19 +722,16 @@ export default function Game() {
     }, false);
 
     let drop = 0;
-
     let pathCounter = 0;
-
     const PATH_DURATION = 1800;
 
     const update = () => {
-      // Draw to buffer
       if (drawing) drawAtMouse(lastMouseEvent);
 
+      // drop sand
       drop++;
-
       if (drop < 400) drawAtXY(0.5, 0.1, elements.sand);
-
+      // remove sand
       if (drop > 400 && out && pathCounter < PATH_DURATION) {
         let y = 0.6 + 0.4 * pathCounter / PATH_DURATION;
         let xamp = 0.3 + 0.7 * pathCounter / PATH_DURATION;
@@ -757,9 +740,6 @@ export default function Game() {
         drawAtXY(x, y, elements.fire, 2, 2);
         pathCounter++;
       }
-
-
-
 
       // Update game state
       updateBuffers(frame, timeBuffer, currentBuffer, reserveBuffer)
