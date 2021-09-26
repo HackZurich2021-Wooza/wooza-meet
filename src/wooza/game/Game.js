@@ -46,7 +46,7 @@ export default function Game() {
   let out = true;
   breathAnalyzer((state) => {
     console.log('breath state', state);
-    out = state === 'OUT';
+    out = true; //state === 'OUT';
   });
 
   // sand game
@@ -787,7 +787,10 @@ export default function Game() {
     <div style={styles.container}>
       <canvas ref={canvasRef} style={styles.canvas}></canvas>
       <img style={styles.sombrero} src="Sombrero_Wooza.png" alt="Sombrero" />
-      <lottie-player ref={shineRef} src="https://assets2.lottiefiles.com/packages/lf20_SSvH5w.json" background="transparent" speed="1" style={styles.shine} loop autoplay />
+      <div ref={shineRef}>
+        <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_SSvH5w.json" background="transparent" speed="1" style={styles.shine} loop autoplay />
+
+      </div>
     </div>
   );
 }
