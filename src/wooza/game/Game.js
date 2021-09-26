@@ -22,20 +22,20 @@ const styles = {
     width: '50vw',
     height: '50vh',
     position: 'relative',
-    bottom: '-20vh',
-    zIndex: '2',
-  },
-  cover: {
-    backgroundColor: 'black',
-    width: '100vw',
-    height: '20vh',
-    position: 'relative',
-    top: '-30vh',
+    top: '40vh',
+    zIndex: '3',
   },
   sombrero: {
     height: '15vh',
     position: 'relative',
-    top: '5vh',
+    top: '25vh',
+    zIndex: '2',
+  },
+  shine: {
+    width: '40vh',
+    height: '40vh',
+    position: 'relative',
+    top: '-5vh',
     zIndex: '1',
   }
 }
@@ -625,6 +625,7 @@ export default function Game() {
 
 
   const canvasRef = useRef(null);
+  const shineRef = useRef(null);
 
 
   useEffect(() => {
@@ -737,6 +738,10 @@ export default function Game() {
     let pathCounter = 0;
     const PATH_DURATION = 1800;
 
+    console.log(shineRef);
+    shineRef.current.hidden = true;
+    console.log(shineRef);
+
     const update = () => {
       if (drawing) drawAtMouse(lastMouseEvent);
 
@@ -752,6 +757,8 @@ export default function Game() {
         drawAtXY(x, y, elements.fire, 2, 2);
         pathCounter++;
       }
+
+      if (pathCounter == PATH_DURATION) shineRef.current.hidden = false;
 
       // Update game state
       updateBuffers(frame, timeBuffer, currentBuffer, reserveBuffer)
@@ -775,13 +782,14 @@ export default function Game() {
 
     requestAnimationFrame(update);
     // eslint-disable-next-line
-  }, [canvasRef]
+  }, [canvasRef, shineRef]
   );
 
   return (
     <div style={styles.container}>
       <canvas ref={canvasRef} style={styles.canvas}></canvas>
       <img style={styles.sombrero} src="Sombrero_Wooza.png" />
+      <lottie-player ref={shineRef} src="https://assets2.lottiefiles.com/packages/lf20_SSvH5w.json" background="transparent" speed="1" style={styles.shine} loop autoplay />
     </div>
   );
 }
