@@ -605,9 +605,23 @@ export default function Game() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    console.log(canvasRef);
+    const context = canvas.getContext('2d');
+    console.log(context);
+    // make_base();
+
+    // function make_base() {
+    //   let base_image = new Image();
+    //   base_image.src = 'Sombrero_Wooza.png';
+    //   base_image.onload = function () {
+    //     context.drawImage(base_image, 0, 0);
+    //   }
+    // }
+
+
+
     canvas.width = canvas.clientWidth / 2;
     canvas.height = canvas.clientHeight / 2;
-    console.log(twgl);
     const gl = twgl.getWebGLContext(canvas, {
       alpha: false,
       antialias: false,
