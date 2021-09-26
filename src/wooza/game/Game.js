@@ -46,24 +46,28 @@ export default function Game() {
   const elements = {
     void: {
       red: 0, green: 0, blue: 0,
+      alpha: 0,
       density: 0, gravity: 0, slip: 0, slide: 0, scatter: 0,
       reactions: [],
       selfReactions: [],
     },
     sand: {
       red: 222 / 256, green: 135 / 256, blue: 58 / 256,
+      alpha: 1,
       density: 0.7, gravity: 0.8, slip: 0, slide: 0.8, scatter: 0,
       reactions: [],
       selfReactions: [],
     },
     fire: {
       red: 0, green: 0, blue: 0,
+      alpha: 0,
       density: -0.5, gravity: -0.2, slip: 0, slide: 0, scatter: 0.8,
       reactions: [],
       selfReactions: [],
     },
     flyingSand: {
       red: 242 / 256, green: 171 / 256, blue: 107 / 256,
+      alpha: 1,
       density: -0.2, gravity: -0.2, slip: 0, slide: 0, scatter: 0.4,
       hidden: true,
       reactions: [],
@@ -172,8 +176,8 @@ export default function Game() {
       width: pixels.width,
       height: pixels.height,
       minMag: gl.NEAREST,
-      internalFormat: gl.RGB,
-      format: gl.RGB,
+      internalFormat: gl.RGBA,
+      format: gl.RGBA,
       wrap: gl.CLAMP_TO_EDGE,
       src: pixels,
     });
@@ -182,7 +186,7 @@ export default function Game() {
   function newPixelData(buffer) {
     const textureWidth = nextPow2(buffer.width);
     const textureHeight = nextPow2(buffer.height);
-    const pixels = new Uint8Array(textureWidth * textureHeight * 3);
+    const pixels = new Uint8Array(textureWidth * textureHeight * 4);
     pixels.width = textureWidth;
     pixels.height = textureHeight;
     return blitPixelData(pixels, buffer);
@@ -194,8 +198,9 @@ export default function Game() {
       pixels[j++] = Math.floor(buffer[i].red * 255);
       pixels[j++] = Math.floor(buffer[i].green * 255);
       pixels[j++] = Math.floor(buffer[i].blue * 255);
+      pixels[j++] = Math.ceil(buffer[i].alpha * 255);
       if (i % buffer.width === buffer.width - 1) {
-        j += (pixels.width - buffer.width) * 3;
+        j += (pixels.width - buffer.width) * 4;
       }
     }
     return pixels;
@@ -621,18 +626,18 @@ export default function Game() {
     canvas.height = canvas.clientHeight / 2;
 
     const gl = twgl.getWebGLContext(canvas, {
-      alpha: false,
+      alpha: true,
       antialias: false,
       depth: false,
       stencil: false,
     });
     twgl.setDefaults({
-      textureColor: [0, 0, 0, 1],
+      textureColor: [0, 0, 0, 0],
       attribPrefix: "a_",
     });
 
     gl.enable(gl.CULL_FACE);
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0, 0, 0, 0);
 
     const bufferWidth = 128;
     const bufferHeight = 128;
@@ -751,7 +756,7 @@ export default function Game() {
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texSubImage2D(
         gl.TEXTURE_2D, 0, 0, 0, bufferWidth, bufferHeight,
-        gl.RGB, gl.UNSIGNED_BYTE, pixels
+        gl.RGBA, gl.UNSIGNED_BYTE, pixels
       );
       // Render
       twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
