@@ -22,7 +22,8 @@ const styles = {
     width: '50vw',
     height: '50vh',
     position: 'relative',
-    top: '25vh',
+    bottom: '-20vh',
+    zIndex: '2',
   },
   cover: {
     backgroundColor: 'black',
@@ -30,6 +31,12 @@ const styles = {
     height: '20vh',
     position: 'relative',
     top: '-30vh',
+  },
+  sombrero: {
+    height: '15vh',
+    position: 'relative',
+    top: '5vh',
+    zIndex: '1',
   }
 }
 
@@ -52,7 +59,7 @@ export default function Game() {
       selfReactions: [],
     },
     sand: {
-      red: 222 / 256, green: 135 / 256, blue: 58 / 256,
+      red: 181 / 256, green: 91 / 256, blue: 5 / 256,
       alpha: 1,
       density: 0.7, gravity: 0.8, slip: 0, slide: 0.8, scatter: 0,
       reactions: [],
@@ -66,7 +73,7 @@ export default function Game() {
       selfReactions: [],
     },
     flyingSand: {
-      red: 242 / 256, green: 171 / 256, blue: 107 / 256,
+      red: 221 / 256, green: 135 / 256, blue: 58 / 256,
       alpha: 1,
       density: -0.2, gravity: -0.2, slip: 0, slide: 0, scatter: 0.4,
       hidden: true,
@@ -774,7 +781,7 @@ export default function Game() {
   return (
     <div style={styles.container}>
       <canvas ref={canvasRef} style={styles.canvas}></canvas>
-      <div style={styles.cover}></div>
+      <img style={styles.sombrero} src="Sombrero_Wooza.png" />
     </div>
   );
 }
