@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 
+import breathAnalyzer from './microphone';
+
 const twgl = window.twgl;
+
 
 const styles = {
   container: {
@@ -27,8 +30,16 @@ const styles = {
   }
 }
 
-export default function Game() {
 
+export default function Game() {
+  // breath analyzer
+  let out = true;
+  breathAnalyzer((state) => {
+    console.log('breath state', state);
+    out = state === 'OUT';
+  });
+
+  // sand game
   const elements = {
     void: {
       red: 0, green: 0, blue: 0,
@@ -79,10 +90,6 @@ export default function Game() {
     },
   });
 
-
-
-
-
   elements.sand.reactions.push({
     chance: 0.45,
     becomes: elements.flyingSand,
@@ -132,6 +139,7 @@ export default function Game() {
     return newArray;
   }
 
+  /*
   function rgb2hex(red, green, blue) {
     return "#" + (
       ("0" + Math.floor(red * 255).toString(16)).slice(-2) +
@@ -139,6 +147,7 @@ export default function Game() {
       ("0" + Math.floor(blue * 255).toString(16)).slice(-2)
     );
   }
+  */
 
   function nextPow2(n) {
     return Math.pow(2, Math.ceil(Math.log2(n)));
@@ -656,7 +665,6 @@ export default function Game() {
     });
 
     let drawing = false;
-    let selectedElement = elements.wall;
 
     let lastMouseEvent = undefined;
     function drawAtMouse(event) {
@@ -712,8 +720,6 @@ export default function Game() {
 
     let drop = 0;
 
-    let out = true;
-
     let pathCounter = 0;
 
     const PATH_DURATION = 1800;
@@ -759,6 +765,7 @@ export default function Game() {
     };
 
     requestAnimationFrame(update);
+    // eslint-disable-next-line
   }, [canvasRef]
   );
 
