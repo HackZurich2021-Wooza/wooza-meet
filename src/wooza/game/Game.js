@@ -46,7 +46,7 @@ export default function Game() {
   let out = true;
   breathAnalyzer((state) => {
     console.log('breath state', state);
-    out = true; //state === 'OUT';
+    out = state === 'OUT';
   });
 
   // sand game
@@ -737,9 +737,7 @@ export default function Game() {
     let pathCounter = 0;
     const PATH_DURATION = 1800;
 
-    console.log(shineRef);
-    shineRef.current.hidden = true;
-    console.log(shineRef);
+    window.$(shineRef.current).css('visibility', 'hidden');
 
     const update = () => {
       if (drawing) drawAtMouse(lastMouseEvent);
@@ -756,7 +754,12 @@ export default function Game() {
         pathCounter++;
       }
 
-      if (pathCounter == PATH_DURATION) shineRef.current.hidden = false;
+      if (pathCounter >= PATH_DURATION) {
+        window.$(shineRef.current).css('visibility', 'visible');
+        setTimeout(() => {
+          window.location.href = 'https://localhost:8080/meet/ClassicDecembersRetainEventually';
+        }, 2000);
+      }
 
       // Update game state
       updateBuffers(frame, timeBuffer, currentBuffer, reserveBuffer)
@@ -789,7 +792,6 @@ export default function Game() {
       <img style={styles.sombrero} src="Sombrero_Wooza.png" alt="Sombrero" />
       <div ref={shineRef}>
         <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_SSvH5w.json" background="transparent" speed="1" style={styles.shine} loop autoplay />
-
       </div>
     </div>
   );
