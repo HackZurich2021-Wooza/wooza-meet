@@ -58,7 +58,7 @@ export default function Conference() {
       <h1 style={styles.header}>Kickoff - Blockchain meets AI 4.0</h1>
       <div style={styles.innerContainer}>
         <div style={styles.item}>
-          <ParticipantDisplay tracks={localTracks} disableAudio={false} />
+          <ParticipantDisplay tracks={localTracks} disableAudio={true} />
         </div>
         <div style={styles.item}>
           {participants.length > 0 ? <ParticipantDisplay tracks={remoteTracks[participants[0]]} /> : null}
