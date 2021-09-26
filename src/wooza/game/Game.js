@@ -612,7 +612,7 @@ export default function Game() {
             a_position.x * 2.0 - 1.0, v_position.y * -2.0 + 1.0, 0.0, 1.0
         );
     }
-`;
+  `;
 
   const fragmentShader = `
     precision mediump float;
@@ -621,11 +621,9 @@ export default function Game() {
     void main(){
         gl_FragColor = texture2D(u_texture, v_position);
     }
-`;
-
+  `;
 
   const canvasRef = useRef(null);
-
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -747,8 +745,7 @@ export default function Game() {
       if (drop > 400 && out && pathCounter < PATH_DURATION) {
         let y = 0.6 + 0.4 * pathCounter / PATH_DURATION;
         let xamp = 0.3 + 0.7 * pathCounter / PATH_DURATION;
-        let x = Math.sin(3.25 * pathCounter * 2 * Math.PI / PATH_DURATION) * xamp * 0.6
-          / 2 + 0.5;
+        let x = Math.sin(3.25 * pathCounter * 2 * Math.PI / PATH_DURATION) * xamp * 0.6 / 2 + 0.5;
         drawAtXY(x, y, elements.fire, 2, 2);
         pathCounter++;
       }
@@ -781,7 +778,7 @@ export default function Game() {
   return (
     <div style={styles.container}>
       <canvas ref={canvasRef} style={styles.canvas}></canvas>
-      <img style={styles.sombrero} src="Sombrero_Wooza.png" />
+      <img style={styles.sombrero} src="Sombrero_Wooza.png" alt="" />
     </div>
   );
 }
