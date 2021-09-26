@@ -50,6 +50,7 @@ export default function Game() {
   });
 
   // sand game
+  const skipTopLines = 32;
   const elements = {
     void: {
       red: 0, green: 0, blue: 0,
@@ -192,7 +193,7 @@ export default function Game() {
 
   function newPixelData(buffer) {
     const textureWidth = nextPow2(buffer.width);
-    const textureHeight = nextPow2(buffer.height);
+    const textureHeight = nextPow2(buffer.height - skipTopLines);
     const pixels = new Uint8Array(textureWidth * textureHeight * 4);
     pixels.width = textureWidth;
     pixels.height = textureHeight;
@@ -201,7 +202,7 @@ export default function Game() {
 
   function blitPixelData(pixels, buffer) {
     let j = 0;
-    for (let i = 0; i < buffer.length; i++) {
+    for (let i = buffer.width*skipTopLines; i < buffer.length; i++) {
       pixels[j++] = Math.floor(buffer[i].red * 255);
       pixels[j++] = Math.floor(buffer[i].green * 255);
       pixels[j++] = Math.floor(buffer[i].blue * 255);
@@ -645,7 +646,7 @@ export default function Game() {
     gl.clearColor(0, 0, 0, 0);
 
     const bufferWidth = 128;
-    const bufferHeight = 128;
+    const bufferHeight = 128 + skipTopLines;
 
     let currentBuffer = newBuffer(bufferWidth, bufferHeight, defaultElement);
     let reserveBuffer = newBuffer(bufferWidth, bufferHeight, defaultElement);
@@ -759,7 +760,7 @@ export default function Game() {
       blitPixelData(pixels, currentBuffer);
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texSubImage2D(
-        gl.TEXTURE_2D, 0, 0, 0, bufferWidth, bufferHeight,
+        gl.TEXTURE_2D, 0, 0, 0, bufferWidth, bufferHeight - skipTopLines,
         gl.RGBA, gl.UNSIGNED_BYTE, pixels
       );
       // Render
